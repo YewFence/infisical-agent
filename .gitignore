@@ -1,0 +1,14 @@
+# Claude
+.claude/
+
+# 编译产物
+*.exe
+infisical-config-generator
+
+# 敏感文件
+client-id
+client-secret
+config.yaml
+
+# 生成的 secrets
+secrets/

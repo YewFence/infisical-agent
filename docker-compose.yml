@@ -1,0 +1,11 @@
+services:
+  infisical-agent:
+    image: infisical/cli:latest
+    container_name: infisical-agent
+    restart: always
+    command: agent --config=/config/config.yaml
+    volumes:
+      - ./config.yaml:/config/config.yaml:ro
+      - ./client-id:/config/client-id:ro
+      - ./client-secret:/config/client-secret:ro
+      - ./secrets:/infisical-secrets

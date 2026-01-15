@@ -1,0 +1,27 @@
+infisical:
+  address: "{{ .Host }}"
+
+auth:
+  type: "universal-auth"
+  config:
+    client-id: "/config/client-id"
+    client-secret: "/config/client-secret"
+    remove_client_secret_on_read: false
+
+templates:
+{{- range .Services }}
+  # ===== {{ . }} =====
+  - destination-path: /infisical-secrets/{{ . }}.env
+    template-content: |
+      {{"{{"}}- with secret "{{ $.ProjectID }}" "{{ $.Environment }}" "/{{ . }}" {{"}}"}}
+      {{"{{"}}- range . {{"}}"}}
+      {{"{{"}}- if .Comment {{"}}"}}
+      # {{"{{"}} .Comment {{"}}"}}
+      {{"{{"}}- end {{"}}"}}
+      {{"{{"}} .Key {{"}}"}}={{"{{"}} .Value {{"}}"}}
+
+      {{"{{"}}- end {{"}}"}}
+      {{"{{"}}- end {{"}}"}}
+    config:
+      polling-interval: {{ $.PollingInterval }}
+{{ end }}
