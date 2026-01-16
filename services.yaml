@@ -1,0 +1,21 @@
+# Infisical Agent 配置
+# 编辑此文件后运行 generator 生成 config.yaml
+
+# Infisical 服务地址 (留空则使用官方云服务)
+# host: "https://app.infisical.com"
+
+# Infisical 项目 ID
+project_id: "<your-project-id>"
+
+# 环境 (dev/staging/prod)
+environment: "prod"
+
+# 轮询间隔
+polling_interval: "300s"
+
+# 服务列表 - 每个服务对应 Infisical 中的一个文件夹
+services:
+  - nginx
+  # - postgres
+  # - caddy
+  # - 添加更多服务...
