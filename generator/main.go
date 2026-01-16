@@ -77,6 +77,11 @@ func main() {
 	for _, svc := range config.Services {
 		fmt.Printf("    cd ../%s && ln -sf ../infisical-agent/secrets/%s.env .env\n", svc, svc)
 	}
+
+	// 打印 env_file 路径供复制
+	fmt.Println("\n📋 同时在 docker-compose.yml 中添加 env_file:")
+	fmt.Println("    env_file:")
+	fmt.Println("      - .env")
 }
 
 func loadConfig(path string) (*Config, error) {

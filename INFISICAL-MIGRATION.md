@@ -113,7 +113,23 @@ cp .env .env.backup
 ln -sf ../infisical-agent/secrets/vaultwarden.env .env
 ```
 
-`docker-compose.yml` **无需修改**，保持原有的 `${VARIABLE}` 写法即可。Docker Compose 会自动读取同目录下的 `.env` 文件（现在是符号链接）。
+同时在 `docker-compose.yml` 中添加 `env_file`：
+
+```yaml
+services:
+  vaultwarden:
+    env_file:
+      - .env
+    environment:
+      DOMAIN: https://password.yewyard.cn  # 固定值直接写
+      SIGNUPS_ALLOWED: false
+      LOG_LEVEL: ${LOG_LEVEL:-warn}  # 可以用默认值语法
+    # ...其他配置
+```
+
+这样 secrets 会通过两种方式生效：
+- **符号链接的 `.env`**：让 `${VAR}` 变量替换和默认值语法正常工作
+- **`env_file: .env`**：确保所有变量都注入到容器环境中
 
 ### 第四步：验证并清理
 
@@ -129,12 +145,13 @@ ln -sf ../infisical-agent/secrets/vaultwarden.env .env
 
 1. **Infisical 中**：创建文件夹 `/<服务名>`，添加 secrets
 2. **services.yaml 中**：在 `services` 列表添加服务名，运行 `./generate.exe`
-3. **服务目录中**：备份并创建符号链接
+3. **服务目录中**：
    ```bash
    cd <服务目录>
-   cp .env .env.backup  # 如果存在
+   cp .env .env.backup  # 备份原文件（如果存在）
    ln -sf ../infisical-agent/secrets/<服务名>.env .env
    ```
+   并在 `docker-compose.yml` 中添加 `env_file: .env`
 
 ---
 

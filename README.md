@@ -120,19 +120,30 @@ cp .env .env.backup
 
 # 创建符号链接
 ln -sf ../infisical-agent/secrets/vaultwarden.env .env
-
-# 正常启动即可
-docker compose up -d
 ```
 
-Docker Compose 会自动读取同目录下的 `.env` 文件，无需修改 `docker-compose.yml`。
+同时在 `docker-compose.yml` 中添加 `env_file` 确保变量注入容器：
+
+```yaml
+services:
+  vaultwarden:
+    env_file:
+      - .env
+    # ...其他配置
+```
+
+这样 secrets 会通过两种方式生效：
+- **符号链接的 `.env`**：让 `${VAR}` 变量替换和默认值语法正常工作
+- **`env_file: .env`**：确保所有变量都注入到容器环境中
 
 ## 添加新服务
 
 1. **Infisical**：创建文件夹 `/<服务名>`，添加环境变量
 2. **services.yaml**：在 `services` 列表中添加服务名
 3. **重新生成**：运行 `./infisical-config-generator`
-4. **业务服务**：创建符号链接 `ln -sf ../infisical-agent/secrets/<服务名>.env .env`
+4. **业务服务**：
+   - 创建符号链接：`ln -sf ../infisical-agent/secrets/<服务名>.env .env`
+   - 在 `docker-compose.yml` 中添加 `env_file: .env`
 
 ## 自行编译
 
