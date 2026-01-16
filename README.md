@@ -41,6 +41,7 @@ chmod 600 client-secret
 mkdir secrets
 
 # 编辑服务配置
+cp services.example.yaml services.yaml
 vim services.yaml
 ```
 

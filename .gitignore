@@ -9,6 +9,7 @@ infisical-config-generator
 client-id
 client-secret
 config.yaml
+services.yaml
 
 # 生成的 secrets
 secrets/
