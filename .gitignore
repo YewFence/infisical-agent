@@ -4,6 +4,7 @@
 # 编译产物
 *.exe
 infisical-config-generator
+icg
 
 # 敏感文件
 client-id
