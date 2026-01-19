@@ -75,7 +75,7 @@ docker compose up -d
 > 具体命令可以参考配置生成器的输出，此处命令仅作示例
 ```bash
 📋 在各服务目录下创建符号链接:
-    cd ../nginx && ln -sf ../infisical-config/secrets/nginx.env .env
+    cd ../nginx && ln -sf ../infisical-agent/secrets/nginx.env .env
 
 📋 同时在 docker-compose.yml 中添加 env_file:
     env_file: .env
