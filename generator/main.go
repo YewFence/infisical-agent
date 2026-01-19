@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 
 	"gopkg.in/yaml.v3"
@@ -15,6 +16,7 @@ type Config struct {
 	ProjectID       string   `yaml:"project_id"`
 	Environment     string   `yaml:"environment"`
 	PollingInterval string   `yaml:"polling_interval"`
+	RootFolder      string   `yaml:"root_folder"`
 	Services        []string `yaml:"services"`
 }
 
@@ -44,7 +46,9 @@ func main() {
 	}
 
 	// 加载模板
-	tmpl, err := template.ParseFiles(templateFile)
+	tmpl, err := template.New(filepath.Base(templateFile)).Funcs(template.FuncMap{
+		"secretPath": buildSecretPath,
+	}).ParseFiles(templateFile)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "加载模板失败: %v\n", err)
 		os.Exit(1)
@@ -114,5 +118,27 @@ func validateConfig(config *Config) error {
 	if config.Host == "" {
 		config.Host = "https://app.infisical.com"
 	}
+	config.RootFolder = normalizeRootFolder(config.RootFolder)
 	return nil
+}
+
+func normalizeRootFolder(root string) string {
+	root = strings.TrimSpace(root)
+	root = strings.Trim(root, "/")
+	if root == "" {
+		return ""
+	}
+	return "/" + root
+}
+
+func buildSecretPath(root, service string) string {
+	service = strings.TrimSpace(service)
+	service = strings.Trim(service, "/")
+	if service == "" {
+		return root
+	}
+	if root == "" {
+		return "/" + service
+	}
+	return root + "/" + service
 }

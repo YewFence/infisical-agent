@@ -13,7 +13,7 @@ templates:
   # ===== {{ . }} =====
   - destination-path: /infisical-secrets/{{ . }}.env
     template-content: |
-      {{"{{"}}- with secret "{{ $.ProjectID }}" "{{ $.Environment }}" "/{{ . }}" {{"}}"}}
+      {{"{{"}}- with secret "{{ $.ProjectID }}" "{{ $.Environment }}" "{{ secretPath $.RootFolder . }}" {{"}}"}}
       {{"{{"}}- range . {{"}}"}}
       {{"{{"}}- if .Comment {{"}}"}}
       # {{"{{"}} .Comment {{"}}"}}
