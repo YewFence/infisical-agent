@@ -91,6 +91,13 @@ func main() {
 	// 打印 env_file 路径供复制
 	fmt.Println("\n📋 同时在 docker-compose.yml 中添加 env_file:")
 	fmt.Println("    env_file: .env")
+
+	// 打印备份建议
+	fmt.Printf("\n💡 建议先备份原 .env 文件（如果有）\n")
+	for _, svc := range config.Services {
+		fmt.Printf("    mv ../%s/.env ../%s/.env.bak\n", svc, svc)
+	}
+
 }
 
 func loadConfig(path string) (*Config, error) {
