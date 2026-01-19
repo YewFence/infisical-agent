@@ -20,10 +20,10 @@ templates:
       {{"{{"}}- range . {{"}}"}}
       {{"{{"}}- if .Comment {{"}}"}}
       # {{"{{"}} .Comment {{"}}"}}
-      {{"{{"}}- end {{"}}"}}
-      {{"{{"}} .Key {{"}}"}}={{"{{"}} .Value {{"}}"}}
+      {{"{{"}} end -{{"}}"}}
+      {{"{{"}} .Key {{"}}"}}="{{"{{"}} .Value | replace "\\" "\\\\" | replace "$" "\\$" | replace "\"" "\\\"" | replace "`" "\\`" {{"}}"}}"
 
-      {{"{{"}}- end {{"}}"}}
+      {{"{{"}} end -{{"}}"}}
       {{"{{"}}- end {{"}}"}}
     config:
       polling-interval: {{ $.PollingInterval }}
