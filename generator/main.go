@@ -27,9 +27,9 @@ func main() {
 		outputFile   string
 	)
 
-	flag.StringVar(&servicesFile, "services", "services.yaml", "服务配置文件路径")
+	flag.StringVar(&servicesFile, "services", "config.yaml", "服务配置文件路径")
 	flag.StringVar(&templateFile, "template", "config.yaml.tmpl", "模板文件路径")
-	flag.StringVar(&outputFile, "output", "config.yaml", "输出文件路径")
+	flag.StringVar(&outputFile, "output", "config-no-mannully-edit.yaml", "输出文件路径")
 	flag.Parse()
 
 	// 读取服务配置
