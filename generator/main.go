@@ -77,15 +77,15 @@ func main() {
 	}
 
 	// 打印符号链接命令供复制
+	agentDirName := getExecutableDirName()
 	fmt.Println("\n📋 在各服务目录下创建符号链接:")
 	for _, svc := range config.Services {
-		fmt.Printf("    cd ../%s && ln -sf ../infisical-agent/secrets/%s.env .env\n", svc, svc)
+		fmt.Printf("    cd ../%s && ln -sf ../%s/secrets/%s.env .env\n", svc, agentDirName, svc)
 	}
 
 	// 打印 env_file 路径供复制
 	fmt.Println("\n📋 同时在 docker-compose.yml 中添加 env_file:")
-	fmt.Println("    env_file:")
-	fmt.Println("      - .env")
+	fmt.Println("    env_file: .env")
 }
 
 func loadConfig(path string) (*Config, error) {
@@ -141,4 +141,24 @@ func buildSecretPath(root, service string) string {
 		return "/" + service
 	}
 	return root + "/" + service
+}
+
+func getExecutableDirName() string {
+	exe, err := os.Executable()
+	if err != nil {
+		return getWorkingDirName()
+	}
+	dir := filepath.Dir(exe)
+	if dir == "." || dir == "" {
+		return getWorkingDirName()
+	}
+	return filepath.Base(dir)
+}
+
+func getWorkingDirName() string {
+	cwd, err := os.Getwd()
+	if err != nil || cwd == "" || cwd == "." {
+		return "infisical-agent"
+	}
+	return filepath.Base(cwd)
 }
