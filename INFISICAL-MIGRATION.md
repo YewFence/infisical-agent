@@ -93,10 +93,10 @@ services:
   - nginx
 ```
 
-**生成 config.yaml**：
+**生成 config-no-manually-edit.yaml**：
 ```bash
 cd infisical-agent
-./generate.exe
+./icg.exe
 ```
 
 ### 第三步：修改业务服务配置
