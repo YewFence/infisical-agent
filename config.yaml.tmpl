@@ -17,13 +17,13 @@ templates:
   - destination-path: /infisical-secrets/{{ . }}.env
     template-content: |
       {{"{{"}}- with secret "{{ $.ProjectID }}" "{{ $.Environment }}" "{{ secretPath $.RootFolder . }}" {{"}}"}}
-      {{"{{"}}- range . {{"}}"}}
-      {{"{{"}}- if .Comment {{"}}"}}
+      {{"{{"}} range . {{"}}"}}
+      {{"{{"}} if .Comment {{"}}"}}
       # {{"{{"}} .Comment {{"}}"}}
-      {{"{{"}}- end {{"}}"}}
-      {{"{{"}} .Key {{"}}"}}={{"{{"}} .Value {{"}}"}}
+      {{"{{"}} end {{"}}"}}
+      {{"{{"}} .Key {{"}}"}}='{{"{{"}} .Value {{"}}"}}'
 
-      {{"{{"}}- end {{"}}"}}
+      {{"{{"}} end {{"}}"}}
       {{"{{"}}- end {{"}}"}}
     config:
       polling-interval: {{ $.PollingInterval }}
