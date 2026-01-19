@@ -20,6 +20,8 @@ type Config struct {
 	Services        []string `yaml:"services"`
 }
 
+const projectHomepage = "https://github.com/YewFence/infisical-agent"
+
 func main() {
 	var (
 		servicesFile string
@@ -35,14 +37,12 @@ func main() {
 	// 读取服务配置
 	config, err := loadConfig(servicesFile)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "读取配置失败: %v\n", err)
-		os.Exit(1)
+		exitWithError("读取配置失败", err)
 	}
 
 	// 验证配置
 	if err := validateConfig(config); err != nil {
-		fmt.Fprintf(os.Stderr, "配置验证失败: %v\n", err)
-		os.Exit(1)
+		exitWithError("配置验证失败", err)
 	}
 
 	// 加载模板
@@ -50,21 +50,18 @@ func main() {
 		"secretPath": buildSecretPath,
 	}).ParseFiles(templateFile)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "加载模板失败: %v\n", err)
-		os.Exit(1)
+		exitWithError("加载模板失败", err)
 	}
 
 	// 生成输出文件
 	outFile, err := os.Create(outputFile)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "创建输出文件失败: %v\n", err)
-		os.Exit(1)
+		exitWithError("创建输出文件失败", err)
 	}
 	defer outFile.Close()
 
 	if err := tmpl.Execute(outFile, config); err != nil {
-		fmt.Fprintf(os.Stderr, "渲染模板失败: %v\n", err)
-		os.Exit(1)
+		exitWithError("渲染模板失败", err)
 	}
 
 	absOutput, _ := filepath.Abs(outputFile)
@@ -173,4 +170,10 @@ func getWorkingDirName() string {
 		return "infisical-agent"
 	}
 	return filepath.Base(cwd)
+}
+
+func exitWithError(message string, err error) {
+	fmt.Fprintf(os.Stderr, "%s: %v\n", message, err)
+	fmt.Fprintf(os.Stderr, "项目主页: %s\n", projectHomepage)
+	os.Exit(1)
 }
