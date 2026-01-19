@@ -71,6 +71,11 @@ func main() {
 	fmt.Printf("✓ 已生成配置文件: %s\n", absOutput)
 	fmt.Printf("  - 项目 ID: %s\n", config.ProjectID)
 	fmt.Printf("  - 环境: %s\n", config.Environment)
+	if config.RootFolder != "" {
+		fmt.Printf("  - 根文件夹: %s\n", config.RootFolder)
+	} else {
+		fmt.Printf("  - 根文件夹: (无)\n")
+	}
 	fmt.Printf("  - 服务数量: %d\n", len(config.Services))
 	for _, svc := range config.Services {
 		fmt.Printf("    • %s\n", svc)
