@@ -121,6 +121,15 @@ func validateConfig(config *Config) error {
 	if len(config.Services) == 0 {
 		return fmt.Errorf("请在 config.yaml 中至少添加一个服务")
 	}
+	trimmedServices := make([]string, 0, len(config.Services))
+	for _, service := range config.Services {
+		trimmed := strings.TrimSpace(service)
+		if trimmed == "" {
+			return fmt.Errorf("请在 config.yaml 中为每个服务设置有效的名称")
+		}
+		trimmedServices = append(trimmedServices, trimmed)
+	}
+	config.Services = trimmedServices
 	if config.PollingInterval == "" {
 		config.PollingInterval = "300s"
 	}
