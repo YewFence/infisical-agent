@@ -22,6 +22,7 @@ type Config struct {
 
 const projectHomepage = "https://github.com/YewFence/infisical-agent"
 
+// 程序入口：读取配置、校验并渲染模板输出文件
 func main() {
 	var (
 		servicesFile string
@@ -97,6 +98,7 @@ func main() {
 
 }
 
+// 读取并解析 YAML 配置文件
 func loadConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -111,6 +113,7 @@ func loadConfig(path string) (*Config, error) {
 	return &config, nil
 }
 
+// 校验配置并填充默认值
 func validateConfig(config *Config) error {
 	if config.ProjectID == "" || config.ProjectID == "<your-project-id>" {
 		return fmt.Errorf("请在 config.yaml 中设置有效的 project_id")
@@ -121,6 +124,7 @@ func validateConfig(config *Config) error {
 	if len(config.Services) == 0 {
 		return fmt.Errorf("请在 config.yaml 中至少添加一个服务")
 	}
+	// 规范化服务名称：去掉首尾空白并确保每项非空
 	trimmedServices := make([]string, 0, len(config.Services))
 	for _, service := range config.Services {
 		trimmed := strings.TrimSpace(service)
@@ -140,6 +144,7 @@ func validateConfig(config *Config) error {
 	return nil
 }
 
+// 规范化根路径，确保以单个 "/" 开头且无多余分隔符
 func normalizeRootFolder(root string) string {
 	root = strings.TrimSpace(root)
 	root = strings.Trim(root, "/")
@@ -149,6 +154,7 @@ func normalizeRootFolder(root string) string {
 	return "/" + root
 }
 
+// 拼接根路径与服务名，生成密钥路径
 func buildSecretPath(root, service string) string {
 	service = strings.TrimSpace(service)
 	service = strings.Trim(service, "/")
@@ -161,6 +167,7 @@ func buildSecretPath(root, service string) string {
 	return root + "/" + service
 }
 
+// 获取可执行文件所在目录名
 func getExecutableDirName() string {
 	exe, err := os.Executable()
 	if err != nil {
@@ -173,6 +180,7 @@ func getExecutableDirName() string {
 	return filepath.Base(dir)
 }
 
+// 获取当前工作目录名作为回退
 func getWorkingDirName() string {
 	cwd, err := os.Getwd()
 	if err != nil || cwd == "" || cwd == "." {
@@ -181,6 +189,7 @@ func getWorkingDirName() string {
 	return filepath.Base(cwd)
 }
 
+// 统一错误输出并退出
 func exitWithError(message string, err error) {
 	fmt.Fprintf(os.Stderr, "%s: %v\n", message, err)
 	fmt.Fprintf(os.Stderr, "项目主页: %s\n", projectHomepage)
