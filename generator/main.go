@@ -113,13 +113,13 @@ func loadConfig(path string) (*Config, error) {
 
 func validateConfig(config *Config) error {
 	if config.ProjectID == "" || config.ProjectID == "<your-project-id>" {
-		return fmt.Errorf("请在 services.yaml 中设置有效的 project_id")
+		return fmt.Errorf("请在 config.yaml 中设置有效的 project_id")
 	}
 	if config.Environment == "" {
-		return fmt.Errorf("请在 services.yaml 中设置 environment")
+		return fmt.Errorf("请在 config.yaml 中设置 environment")
 	}
 	if len(config.Services) == 0 {
-		return fmt.Errorf("请在 services.yaml 中至少添加一个服务")
+		return fmt.Errorf("请在 config.yaml 中至少添加一个服务")
 	}
 	if config.PollingInterval == "" {
 		config.PollingInterval = "300s"

@@ -158,7 +158,7 @@ services:
 ## 添加新服务
 
 1. **Infisical**：创建文件夹 `/<服务名>`，添加环境变量
-2. **services.yaml**：在 `services` 列表中添加服务名
+2. **config.yaml**：在 `services` 列表中添加服务名
 3. **重新生成**：运行 `./infisical-config-generator`
 4. **业务服务**：
    - 创建符号链接：`ln -sf ../infisical-agent/secrets/<服务名>.env .env`
