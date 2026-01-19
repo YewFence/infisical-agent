@@ -117,7 +117,7 @@ infisical-agent/
 ├── config.yaml.tmpl              # 配置模板
 ├── config.yaml                   # 服务列表（需编辑）
 ├── icg(.exe)                     # 配置生成器可执行文件（在 Release 页面中下载）
-├── config-no-mannully-edit.yaml  # 生成的配置（自动生成）
+├── config-no-manually-edit.yaml  # 生成的配置（自动生成）
 ├── client-id                     # Machine Identity ID（需创建）
 ├── client-secret                 # Machine Identity Secret（需创建）
 └── secrets/                      # 生成的 secrets 文件（自动创建）
