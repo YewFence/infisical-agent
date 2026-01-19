@@ -1,3 +1,6 @@
+#
+# 本配置为自动生成，请前往 config.yaml 修改；不要手动更改本文件。
+#
 infisical:
   address: "{{ .Host }}"
 
@@ -13,7 +16,7 @@ templates:
   # ===== {{ . }} =====
   - destination-path: /infisical-secrets/{{ . }}.env
     template-content: |
-      {{"{{"}}- with secret "{{ $.ProjectID }}" "{{ $.Environment }}" "/{{ . }}" {{"}}"}}
+      {{"{{"}}- with secret "{{ $.ProjectID }}" "{{ $.Environment }}" "{{ secretPath $.RootFolder . }}" {{"}}"}}
       {{"{{"}}- range . {{"}}"}}
       {{"{{"}}- if .Comment {{"}}"}}
       # {{"{{"}} .Comment {{"}}"}}
@@ -25,3 +28,4 @@ templates:
     config:
       polling-interval: {{ $.PollingInterval }}
 {{ end }}
+

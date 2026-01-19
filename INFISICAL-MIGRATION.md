@@ -52,7 +52,7 @@ infisical-agent/
 ├── docker-compose.yml      # Agent 容器配置
 ├── config.yaml             # Agent 配置文件（由 generate 生成）
 ├── config.yaml.tmpl        # 配置模板
-├── services.yaml           # 服务列表配置
+├── config.yaml           # 服务列表配置
 ├── generate.exe            # 配置生成器
 ├── generator/              # 生成器源码
 ├── client-id               # Machine Identity Client ID
@@ -75,7 +75,7 @@ services:
       - ./secrets:/infisical-secrets
 ```
 
-**services.yaml**（服务配置）：
+**config.yaml**（服务配置）：
 ```yaml
 # Infisical 项目 ID
 project_id: "<your-project-id>"
@@ -93,10 +93,10 @@ services:
   - nginx
 ```
 
-**生成 config.yaml**：
+**生成 config-no-manually-edit.yaml**：
 ```bash
 cd infisical-agent
-./generate.exe
+./icg.exe
 ```
 
 ### 第三步：修改业务服务配置
@@ -144,7 +144,7 @@ services:
 只需 3 步：
 
 1. **Infisical 中**：创建文件夹 `/<服务名>`，添加 secrets
-2. **services.yaml 中**：在 `services` 列表添加服务名，运行 `./generate.exe`
+2. **config.yaml 中**：在 `services` 列表添加服务名，运行 `./generate.exe`
 3. **服务目录中**：
    ```bash
    cd <服务目录>

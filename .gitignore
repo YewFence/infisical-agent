@@ -9,6 +9,7 @@ icg
 # 敏感文件
 client-id
 client-secret
+config-no-manually-edit.yaml
 config.yaml
 services.yaml
 
