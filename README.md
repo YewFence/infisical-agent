@@ -8,8 +8,9 @@
 
 1. 登录 [Infisical](https://app.infisical.com)
 2. 创建项目，记录 **项目 ID**
-3. 为每个服务创建文件夹（如 `/vaultwarden`），添加环境变量
-4. 创建 Machine Identity（Universal Auth），记录 `Client ID` 和 `Client Secret`
+3. 为每个不同的环境创建单独的文件夹（可选，可以用于区分不同设备等）
+4. 为每个服务创建文件夹（如 `/vaultwarden`），添加环境变量
+5. 创建 Machine Identity（Universal Auth），记录 `Client ID` 和 `Client Secret`
 
 #### Machine Identity 配置建议
 
@@ -41,11 +42,11 @@ chmod 600 client-secret
 mkdir secrets
 
 # 编辑服务配置
-cp services.example.yaml services.yaml
-vim services.yaml
+cp config.example.yaml config.yaml
+vim config.yaml
 ```
 
-### 3. 生成配置并启动
+### 3. 生成配置
 #### Linux
 ```bash
 # 下载生成器
@@ -65,14 +66,28 @@ Invoke-WebRequest -Uri "https://github.com/YewFence/infisical-agent/releases/lat
 # 运行生成器
 ./icg.exe
 ```
-#### 启动 Agent
+### 4. 启动 Agent
 ```bash
 docker compose up -d
 ```
 
+### 5. 生成 .env 软链接
+> 具体命令可以参考配置生成器的输出，此处命令仅作示例
+```bash
+📋 在各服务目录下创建符号链接:
+    cd ../nginx && ln -sf ../infisical-config/secrets/nginx.env .env
+
+📋 同时在 docker-compose.yml 中添加 env_file:
+    env_file: .env
+
+💡 建议先备份原 .env 文件
+    mv ../nginx/.env ../nginx/.env.bak
+```
+
+
 ## 配置说明
 
-### services.yaml
+### config.yaml
 
 ```yaml
 # Infisical 项目 ID
@@ -84,24 +99,28 @@ environment: "prod"
 # 轮询间隔
 polling_interval: "300s"
 
-# 服务列表 - 每个服务对应 Infisical 中的一个文件夹
+# 可选：读取配置的根文件夹，可以用来在一个项目中区分不同环境
+# root_folder: "/project-a"
+
+# 服务列表 - 每个服务名称对应 Infisical 中读取配置的根文件夹下的一个文件夹
 services:
-  - vaultwarden
-  - postgres
   - nginx
+  # - vaultwarden
+  # - postgres
 ```
 
 ### 目录结构
 
 ```
 infisical-agent/
-├── docker-compose.yml     # Agent 容器配置
-├── config.yaml.tmpl       # 配置模板
-├── services.yaml          # 服务列表（需编辑）
-├── config.yaml            # 生成的配置（自动生成）
-├── client-id              # Machine Identity ID（需创建）
-├── client-secret          # Machine Identity Secret（需创建）
-└── secrets/               # 生成的 secrets 文件（自动创建）
+├── docker-compose.yml            # Agent 容器配置
+├── config.yaml.tmpl              # 配置模板
+├── config.yaml                   # 服务列表（需编辑）
+├── icg(.exe)                     # 配置生成器可执行文件（在 Release 页面中下载）
+├── config-no-mannully-edit.yaml  # 生成的配置（自动生成）
+├── client-id                     # Machine Identity ID（需创建）
+├── client-secret                 # Machine Identity Secret（需创建）
+└── secrets/                      # 生成的 secrets 文件（自动创建）
     ├── vaultwarden.env
     ├── postgres.env
     └── ...
